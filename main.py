@@ -194,8 +194,39 @@ def miniwob(opt):
     env.close()
 
 # 【!要確認!】count-shape環境のときは以下の関数を実行
-def miniwob_count_shape(count_shape_str):
-    print(count_shape_str)
+def miniwob_count_shape(opt):
+    # 挙動テスト用print
+    # print(count_shape_str)
+
+    # ライブラリgymでMiniWobの実行環境をインスタンス化
+    env = gym.make("MiniWoBEnv-v0", env_name=opt.env, headless=opt.headless)
+
+    success = 0
+    for _ in tqdm(range(opt.num_episodes)):
+        # llm_agent.pyに指定のタスク種別(count-shape)等の情報を渡している
+        llm_agent = LLMAgent(
+            opt.env,
+            rci_plan_loop=opt.erci,
+            rci_limit=opt.irci,
+            llm=opt.llm,
+            state_grounding=opt.sgrounding,
+        )
+
+        # initialize environment
+        # ライブラリgymでreset関数により、gymの実行環境を初期化
+        states = env.reset(seeds=[random.random()], record_screenshots=True)
+
+        # llm_agent内で"count-shape"の文言を利用できるようにしている
+        llm_agent.set_goal(states[0].utterance)
+
+        # count-shapeタスクのhtml情報を取得
+        html_state = get_html_state(opt, states)
+
+        # llm_agent.pyにhtmlを渡す処理
+        llm_agent.update_html_state(html_state)
+
+        print(html_state)
+
 
 def get_html_state(opt, states):
     extra_html_task = [
@@ -212,12 +243,12 @@ def get_html_state(opt, states):
 
 # メインの実行タスク
 if __name__ == "__main__":
+    # 入力したタスク種別の情報を取得
     opt = parse_opt()
     if opt.env == "facebook":
         url = "https://www.facebook.com/"
         web(opt, url)
     elif opt.env == "count-shape":
-        count_shape_str = "def SUCESS!!!!!!!!!!!!!!!! and DONE"
-        miniwob_count_shape(count_shape_str)
+        miniwob_count_shape(opt)
     else:
         miniwob(opt)

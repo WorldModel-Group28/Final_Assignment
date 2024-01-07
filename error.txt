@@ -1,0 +1,22 @@
+INFO:root:Starting WebDriver Instance 0
+/usr/local/lib/python3.10/dist-packages/gym/utils/passive_env_checker.py:20: UserWarning: WARN: It seems a Box observation space is an image but the `dtype` is not `np.uint8`, actual type: int64. If the Box observation space is not an image, we recommend flattening the observation to have only a 1D vector.
+  logger.warn(
+/usr/local/lib/python3.10/dist-packages/gym/utils/passive_env_checker.py:174: UserWarning: WARN: Future gym versions will require that `Env.reset` can be passed a `seed` instead of using `Env.seed` for resetting the environment random number generator.
+  logger.warn(
+/usr/local/lib/python3.10/dist-packages/gym/utils/passive_env_checker.py:187: UserWarning: WARN: Future gym versions will require that `Env.reset` can be passed `options` to allow the environment initialisation to be passed additional information.
+  logger.warn(
+ERROR:root:Error closing the driver of instance 0
+Traceback (most recent call last):
+  File "/workspace/rci-agent-main/computergym/computergym/miniwob/miniwob_interface/instance.py", line 128, in run
+    self.create_driver()
+  File "/workspace/rci-agent-main/computergym/computergym/miniwob/miniwob_interface/instance.py", line 178, in create_driver
+    self.driver = webdriver.Chrome(options=options)
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/chrome/webdriver.py", line 45, in __init__
+    super().__init__(
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/chromium/webdriver.py", line 50, in __init__
+    self.service.start()
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/common/service.py", line 102, in start
+    self.assert_process_still_running()
+  File "/usr/local/lib/python3.10/dist-packages/selenium/webdriver/common/service.py", line 115, in assert_process_still_running
+    raise WebDriverException(f"Service {self._path} unexpectedly exited. Status code was: {return_code}")
+selenium.common.exceptions.WebDriverException: Message: Service /root/.cache/selenium/chromedriver/linux64/120.0.6099.109/chromedriver unexpectedly exited. Status code was: 127

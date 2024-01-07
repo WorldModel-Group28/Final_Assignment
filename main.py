@@ -144,7 +144,7 @@ def miniwob(opt):
         html_state = get_html_state(opt, states)
 
         # HTMLを出力するテスト 
-        print(html_state)
+        # print(html_state)
         llm_agent.update_html_state(html_state)
 
         try:

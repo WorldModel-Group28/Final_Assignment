@@ -216,7 +216,10 @@ def miniwob_count_shape(opt):
         # ライブラリgymでreset関数により、gymの実行環境を初期化
         states = env.reset(seeds=[random.random()], record_screenshots=True)
 
-        # llm_agent内で"count-shape"の文言を利用できるようにしている
+        # テスト用コード：count-shapeの指示文を出力
+        # print("Our goal is" + states[0].utterance)
+
+        # llm_agent内でcount-shapeの問題文を利用できるようにしている
         llm_agent.set_goal(states[0].utterance)
 
         # count-shapeタスクのhtml情報を取得
@@ -225,7 +228,57 @@ def miniwob_count_shape(opt):
         # llm_agent.pyにhtmlを渡す処理
         llm_agent.update_html_state(html_state)
 
-        print(html_state)
+        # テスト用コード：HTMLがちゃんと取得できているか出力
+        # print(html_state)
+
+        try:
+            llm_agent.initialize_plan_count_shape()
+        except:
+            continue
+        
+        ''' 未検証コード
+        if opt.step == -1:
+            step = llm_agent.get_plan_step()
+        else:
+            step = opt.step
+
+        logging.info(f"The number of generated action steps: {step}")
+
+        for _ in range(step):
+            assert len(states) == 1
+            try:
+                instruction = llm_agent.generate_action()
+                logging.info(f"The executed instruction: {instruction}")
+
+                miniwob_action = llm_agent.convert_to_miniwob_action(instruction)
+
+                states, rewards, dones, _ = env.step([miniwob_action])
+            except ValueError:
+                print("Invalid action or rci action fail")
+                rewards = [0]
+                dones = [True]
+                break
+
+            if rewards[0] != 0:
+                break
+
+            if all(dones):  # or llm_agent.check_finish_plan():
+                break
+
+            html_state = get_html_state(opt, states)
+            llm_agent.update_html_state(html_state)
+
+        if rewards[0] > 0:
+            success += 1
+            llm_agent.save_result(True)
+        else:
+            llm_agent.save_result(False)
+
+        print(f"success rate: {success / opt.num_episodes}")
+
+        '''
+
+    env.close()
 
 
 def get_html_state(opt, states):

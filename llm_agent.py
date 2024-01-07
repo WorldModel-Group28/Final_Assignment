@@ -209,24 +209,80 @@ class LLMAgent:
             idx += 1
 
     def initialize_plan(self):
+        # ゴールセットされているか確認している
         if not self.custom_gaol:
             if self.with_task:
                 self.initialize_task()
 
+        # init_plan_promptやプロンプトを回さない指示になっていたらこの関数を実行しないようにしている
         if not self.prompt.init_plan_prompt or self.rci_plan_loop == -1:
             return
 
+        #########  必要な導入指示とHTMLをプロンプトに追記する処理
+        # baseディクトリにあるbase.txtを取得→base.txtは全タスク共通のもの
         pt = self.prompt.base_prompt
+        # htmlをプロンプトに追加している
         pt += self.webpage_state_prompt(True, with_task=self.with_task)
+        # 「plan:」をプロンプトに追加している
         pt += self.prompt.init_plan_prompt
 
+        # 導入指示とHTML情報をプロントに入力して、返ってきた文言をmessageに格納
         message = "\n" + self.get_response(pt)
 
+        # メッセージをプロンプトに追記
         pt += message
 
+        # RCIのプロンプトロジックに入れて対応する
         for _ in range(self.rci_plan_loop):
             pt, message = self.rci_plan(pt)
             pt += message
+
+        self.current_plan = message
+        self.save(pt)
+
+        return
+
+    def initialize_plan_count_shape(self):
+        # ゴールセットされているか確認している
+        if not self.custom_gaol:
+            if self.with_task:
+                self.initialize_task()
+
+        # init_plan_promptやプロンプトを回さない指示になっていたらこの関数を実行しないようにしている
+        if not self.prompt.init_plan_prompt or self.rci_plan_loop == -1:
+            return
+
+        #########  必要な導入指示とHTMLをプロンプトに追記する処理
+        # baseディクトリにあるbase.txtを取得→base.txtは全タスク共通のもの
+        pt = self.prompt.base_prompt
+        # htmlをプロンプトに追加している
+        pt += self.webpage_state_prompt(True, with_task=self.with_task)
+        # 「plan:」をプロンプトに追加している
+        pt += self.prompt.init_plan_prompt
+
+        # テスト用コード：プロンプトに渡す予定の導入指示とHTML情報を出力
+        # print("Our Request is" + pt)
+
+        # 導入指示とHTML情報をプロントに入力して、返ってきた文言をmessageに格納
+        message = "\n" + self.get_response(pt)
+
+        # テスト用コード：LLMから返ってきた内容を出力
+        # print("LLM Response is" + message)
+
+        # メッセージをプロンプトに追記
+        pt += message
+
+        ''' RCIのプロンプトロジック vs 画像描写を読みとるタスクなので、以下のRCIプロンプトロジックは不要とする
+        for _ in range(self.rci_plan_loop):
+            pt, message = self.rci_plan(pt)
+            pt += message
+        '''
+
+        # テスト用コード：Current planが正しく出ているか出力
+        # print("Current_plan is" + message)
+
+        # テスト用コード：Current planを取得して出力
+        # print("pt is" + pt)
 
         self.current_plan = message
         self.save(pt)

@@ -144,7 +144,7 @@ def miniwob(opt):
         html_state = get_html_state(opt, states)
 
         # HTMLを出力するテスト 
-        print(html_state)
+        # print(html_state)
         llm_agent.update_html_state(html_state)
 
         try:
@@ -193,6 +193,9 @@ def miniwob(opt):
 
     env.close()
 
+# 【!要確認!】count-shape環境のときは以下の関数を実行
+def miniwob_count_shape(count_shape_str):
+    print(count_shape_str)
 
 def get_html_state(opt, states):
     extra_html_task = [
@@ -213,5 +216,8 @@ if __name__ == "__main__":
     if opt.env == "facebook":
         url = "https://www.facebook.com/"
         web(opt, url)
+    elif opt.env == "count-shape":
+        count_shape_str = "def SUCESS!!!!!!!!!!!!!!!! and DONE"
+        miniwob_count_shape(count_shape_str)
     else:
         miniwob(opt)

@@ -211,7 +211,7 @@ class MiniWoBElementClickXpath(MiniWoBAction):
     def __call__(self, driver: Chrome):
         try:
             # elements = driver.find_elements(By.XPATH, str(self.xpath))
-            xpath_str = "//svg[@id=\"area_svg\"]/text[1]"
+            xpath_str = "//button"
             elements = driver.find_elements(By.XPATH, xpath_str)
         except:
             print(f"Invalid xpath: {self.xpath}")
@@ -227,7 +227,7 @@ class MiniWoBElementClickXpath(MiniWoBAction):
                 element = WebDriverWait(driver, 0.1).until(
                     EC.element_to_be_clickable(element)
                 )
-
+                # buttonタグでかつ取得した値がプロンプトの回答と一致しているときにクリックする
                 if element.tag_name == "button":
                     element.click()
                 elif element.tag_name == "option":
@@ -235,7 +235,6 @@ class MiniWoBElementClickXpath(MiniWoBAction):
                     select.select_by_visible_text(element.text)
                 else:
                     chain = ActionChains(driver)
-
                     chain.move_to_element(element).click().perform()
 
                 action_performed = True

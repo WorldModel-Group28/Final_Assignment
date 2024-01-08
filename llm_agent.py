@@ -201,6 +201,7 @@ class LLMAgent:
 
         return instruciton
 
+    # 総プラン数をカウントする
     def get_plan_step(self):
         idx = 1
         while True:
@@ -281,7 +282,7 @@ class LLMAgent:
         # テスト用コード：Current planが正しく出ているか出力
         # print("Current_plan is" + message)
 
-        # テスト用コード：Current planを取得して出力
+        # テスト用コード：ptを取得して出力
         # print("pt is" + pt)
 
         self.current_plan = message
@@ -341,10 +342,14 @@ class LLMAgent:
         return message
 
     def generate_action(self) -> str:
+        # 指示文をプロンプトに追記する
         pt = self.prompt.base_prompt
+        # 指示分にHTMLを追記する
         pt += self.webpage_state_prompt(with_task=self.with_task)
+        # 「plan:」という文言を追記する
         if self.prompt.init_plan_prompt and self.rci_plan_loop != -1:
             pt += self.current_plan_prompt()
+        # 過去に実行している指示があれば、追記する
         pt += self.instruction_history_prompt()
         if self.past_instruction:
             update_action_prompt = self.prompt.action_prompt.replace(
@@ -364,6 +369,7 @@ class LLMAgent:
                 )
 
             action_prompt = update_action_prompt
+        # 「the first instruction should be `」文言をセット
         else:
             action_prompt = self.prompt.first_action_prompt
 
@@ -377,7 +383,13 @@ class LLMAgent:
 
         pt += action_prompt
 
+        # テスト用コード：指示文がどんな内容か出力する
+        # print("generate_action pt is" + pt)
+
         message = self.get_response(pt)
+
+        # テスト用コード：どんな内容が返答されているか出力する
+        print("generate_action message is " + message)
 
         pt += self.process_instruction(message) + "`."
 
@@ -442,7 +454,8 @@ class LLMAgent:
             return MiniWoBMoveXpath(xpath)
         elif inst_type == "clickxpath":
             xpath = " ".join(instruction[1:])
-            print("Actual instruction is " + xpath)
+            # テスト用コード：instructionの中身を確認するために出力
+            # print("Actual instruction is " + xpath)
             return MiniWoBElementClickXpath(xpath)
         elif inst_type == "clickoption":
             xpath = " ".join(instruction[1:])

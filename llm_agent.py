@@ -11,6 +11,7 @@ from computergym.miniwob.miniwob_interface.action import (
     MiniWoBType,
     MiniWoBElementClickId,
     MiniWoBElementClickXpath,
+    MiniWoBElementClickXpath_count_shape,
     MiniWoBElementClickOption,
     MiniWoBMoveXpath,
 )
@@ -200,6 +201,15 @@ class LLMAgent:
         instruciton = instruciton.strip("'")
 
         return instruciton
+
+    # プロンプトから返ってきたメッセージで必要な文字列のみに処理する
+    def process_answer(self, message: str):
+        # 数字だけ取り出す処理
+        message_cut = re.sub(r"\D", "", message)
+        # テスト用コード：カットしたメッセージを出力する
+        # print("message_cut is " + message_cut)
+
+        return message_cut
 
     # 総プラン数をカウントする
     def get_plan_step(self):
@@ -402,6 +412,29 @@ class LLMAgent:
         self.save(pt)
 
         return instruction
+
+    def generate_answer_count_shape(self) -> str:
+        # 指示文をプロンプトに追記する
+        pt = self.prompt.base_count_shape_prompt
+        # 「Current task: 」とゴール(task)を追記
+        action_prompt = "Current task: " + self.task
+        # プロンプトに解くタスクを追記する
+        pt += action_prompt
+        # 指示分にHTMLを追記する
+        pt += self.webpage_state_prompt(with_task=self.with_task)
+
+        # テスト用コード：指示文がどんな内容か出力する
+        print("Input pt is" + pt)
+
+        message = self.get_response(pt)
+
+        # テスト用コード：どんな内容が返答されているか出力する
+        print("generate_answer message is " + message)
+
+        # message内にある文言で不要な部分を削除する
+        answer_message = self.process_answer(message)
+
+        return answer_message
 
     def update_action(self, pt=None, message=None):
         if self.prompt.update_action and self.state_grounding:

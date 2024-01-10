@@ -15,6 +15,8 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
+from computergym.miniwob.miniwob_interface.action import MiniWoBElementClickXpath_count_shape
+
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument("--env", type=str, default="click-button")
@@ -228,66 +230,22 @@ def miniwob_count_shape(opt):
         # llm_agent.pyにhtmlを渡す処理
         llm_agent.update_html_state(html_state)
 
-        # プロンプトにgoalとHTMLを渡して解かせる
+        # プロンプトにgoalとHTMLを渡してanswerを受け取る
         try:
-            instruction = llm_agent.generate_action()
-            logging.info(f"The executed instruction: {instruction}")
+            answer = llm_agent.generate_answer_count_shape()
+            logging.info(f"The executed answer: {answer}")
 
-            miniwob_action = llm_agent.convert_to_miniwob_action(instruction)
+            # 回答の値のbuttonを押しにいく
+            # miniwob_action = MiniWoBElementClickXpath_count_shape(answer)
 
-            states, rewards, dones, _ = env.step([miniwob_action])
+            # envに結果を返してリワードを更新する
+            # states, rewards, dones, _ = env.step([miniwob_action])
         except ValueError:
             print("Invalid action or rci action fail")
             rewards = [0]
             dones = [True]
 
-        # テスト用コード：HTMLがちゃんと取得できているか出力
-        # print(html_state)
-
-        ''' 一度llm_agentから出力するだけなので、step数をカウントすることも不要、initializeのプロンプトも不要
-        # タスク指示とHTMLをプロンプトに渡して、プロンプトからの返答内容をptに保存する
-        try:
-            llm_agent.initialize_plan_count_shape()
-        except:
-            continue
-        
-        # 実行するプラン数をカウントする
-        if opt.step == -1:
-            step = llm_agent.get_plan_step()
-        else:
-            step = opt.step
-
-        logging.info(f"The number of generated action steps: {step}")
-
-        #### プランの数だけ下記処理を実行する→ここを変更する
-        # 1.プロンプトから該当の答えを持ってくる
-        # 2.回答されたものを""等で区切っておき、それだけの文字列にする
-        # 3.buttonのelementを取得してクリックする
-        for _ in range(step):
-            assert len(states) == 1
-            try:
-                instruction = llm_agent.generate_action()
-                logging.info(f"The executed instruction: {instruction}")
-
-                miniwob_action = llm_agent.convert_to_miniwob_action(instruction)
-
-                states, rewards, dones, _ = env.step([miniwob_action])
-            except ValueError:
-                print("Invalid action or rci action fail")
-                rewards = [0]
-                dones = [True]
-                break
-
-            if rewards[0] != 0:
-                break
-
-            if all(dones):  # or llm_agent.check_finish_plan():
-                break
-
-            html_state = get_html_state(opt, states)
-            llm_agent.update_html_state(html_state)
-        '''
-
+        # 成功していれば、rewardは正になる
         if rewards[0] > 0:
             success += 1
             llm_agent.save_result(True)

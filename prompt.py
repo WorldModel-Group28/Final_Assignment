@@ -28,11 +28,6 @@ class Prompt:
             self.base_prompt = f.read()
             self.base_prompt = self.replace_regex(self.base_prompt)
 
-        # base_count_shape.txtを用意して追記
-        with open(base_dir + "base_count_shape.txt") as f:
-            self.base_count_shape_prompt = f.read()
-            self.base_count_shape_prompt = self.replace_regex(self.base_count_shape_prompt)
-
         with open(base_dir + "initialize_plan.txt") as f:
             self.init_plan_prompt = f.read()
 

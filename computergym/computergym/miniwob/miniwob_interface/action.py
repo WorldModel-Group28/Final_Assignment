@@ -210,15 +210,14 @@ class MiniWoBElementClickXpath(MiniWoBAction):
 
     def __call__(self, driver: Chrome):
         try:
-            # elements = driver.find_elements(By.XPATH, str(self.xpath))
-            xpath_str = "//button"
-            elements = driver.find_elements(By.XPATH, xpath_str)
+            elements = driver.find_elements(By.XPATH, str(self.xpath))
+            for element in elements:
+                print("element is " + element.text)
         except:
             print(f"Invalid xpath: {self.xpath}")
             return
         if not element:
-            # print(f"There are no elements Invalid xpath: {self.xpath}")
-            print(f"There are no elements Invalid xpath: {xpath_str}")
+            print(f"There are no elements Invalid xpath: {xpath}")
             return
 
         action_performed = False
@@ -271,89 +270,6 @@ class MiniWoBElementClickXpath(MiniWoBAction):
             "type": "ElementClickXpath",
             "element": self.xpath,
         }
-
-# count-shape用のクリックタスク実行関数を作成
-class MiniWoBElementClickXpath_count_shape(MiniWoBAction):
-    """An action that clicks on a DOM element regardless of its position
-    or visibility.
-
-    This is done via a JavaScript call.
-
-    Args:
-        element: One of the following:
-            - the DOMElement object to click
-            - ref (int) of the DOMElement object to click
-        fail_hard (bool): If True, throw an error when the click cannot
-            be successfully performed
-    """
-
-    def __init__(self, xpath):
-        self.xpath = xpath
-
-    def __call__(self, driver: Chrome):
-        try:
-            # elements = driver.find_elements(By.XPATH, str(self.xpath))
-            xpath_str = "//button"
-            elements = driver.find_elements(By.XPATH, xpath_str)
-        except:
-            print(f"Invalid xpath: {self.xpath}")
-            return
-        if not element:
-            # print(f"There are no elements Invalid xpath: {self.xpath}")
-            print(f"There are no elements Invalid xpath: {xpath_str}")
-            return
-
-        action_performed = False
-        for element in elements:
-            try:
-                element = WebDriverWait(driver, 0.1).until(
-                    EC.element_to_be_clickable(element)
-                )
-                # buttonタグでかつ取得した値がプロンプトの回答と一致しているときにクリックする
-                if element.tag_name == "button":
-                    element.click()
-                elif element.tag_name == "option":
-                    select = Select(element.find_element(By.XPATH, ".."))
-                    select.select_by_visible_text(element.text)
-                else:
-                    chain = ActionChains(driver)
-                    chain.move_to_element(element).click().perform()
-
-                action_performed = True
-
-            except Exception as e:
-                # print(f"Error message: {e}")
-
-                if "intercept" in str(e):
-                    element.send_keys(Keys.ENTER)
-                    action_performed = True
-                    break
-            
-            if action_performed:
-                break
-        if not action_performed:
-            print("Click noninteractable element")
-
-    def __str__(self):
-        return "click(xpath = {})".format(self.xpath)
-
-    __repr__ = __str__
-
-    def __eq__(self, other):
-        """Compare based on element refs."""
-        if not isinstance(other, MiniWoBElementClickXpath):
-            return False
-        return (self.ref, self._fail_hard) == (other.ref, other._fail_hard)
-
-    def __hash__(self):
-        return hash((self.__class__.__name__, self.ref, self._fail_hard))
-
-    def to_dict(self):
-        return {
-            "type": "ElementClickXpath",
-            "element": self.xpath,
-        }
-
 
 class MiniWoBType(MiniWoBAction):
     """An action that sends keystrokes to the focused element.

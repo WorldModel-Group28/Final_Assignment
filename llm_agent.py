@@ -11,7 +11,6 @@ from computergym.miniwob.miniwob_interface.action import (
     MiniWoBType,
     MiniWoBElementClickId,
     MiniWoBElementClickXpath,
-    MiniWoBElementClickXpath_count_shape,
     MiniWoBElementClickOption,
     MiniWoBMoveXpath,
 )
@@ -202,15 +201,6 @@ class LLMAgent:
 
         return instruciton
 
-    # プロンプトから返ってきたメッセージで必要な文字列のみに処理する
-    def process_answer(self, message: str):
-        # 数字だけ取り出す処理
-        message_cut = re.sub(r"\D", "", message)
-        # テスト用コード：カットしたメッセージを出力する
-        # print("message_cut is " + message_cut)
-
-        return message_cut
-
     # 総プラン数をカウントする
     def get_plan_step(self):
         idx = 1
@@ -247,53 +237,6 @@ class LLMAgent:
         for _ in range(self.rci_plan_loop):
             pt, message = self.rci_plan(pt)
             pt += message
-
-        self.current_plan = message
-        self.save(pt)
-
-        return
-
-    def initialize_plan_count_shape(self):
-        # ゴールセットされているか確認している
-        if not self.custom_gaol:
-            if self.with_task:
-                self.initialize_task()
-
-        # init_plan_promptやプロンプトを回さない指示になっていたらこの関数を実行しないようにしている
-        if not self.prompt.init_plan_prompt or self.rci_plan_loop == -1:
-            return
-
-        #########  必要な導入指示とHTMLをプロンプトに追記する処理
-        # baseディクトリにあるbase.txtを取得→base.txtは全タスク共通のもの
-        pt = self.prompt.base_prompt
-        # htmlをプロンプトに追加している
-        pt += self.webpage_state_prompt(True, with_task=self.with_task)
-        # 「plan:」をプロンプトに追加している
-        pt += self.prompt.init_plan_prompt
-
-        # テスト用コード：プロンプトに渡す予定の導入指示とHTML情報を出力
-        # print("Our Request is" + pt)
-
-        # 導入指示とHTML情報をプロントに入力して、返ってきた文言をmessageに格納
-        message = "\n" + self.get_response(pt)
-
-        # テスト用コード：LLMから返ってきた内容を出力
-        # print("LLM Response is" + message)
-
-        # メッセージをプロンプトに追記
-        pt += message
-
-        ''' RCIのプロンプトロジック vs 画像描写を読みとるタスクなので、以下のRCIプロンプトロジックは不要とする
-        for _ in range(self.rci_plan_loop):
-            pt, message = self.rci_plan(pt)
-            pt += message
-        '''
-
-        # テスト用コード：Current planが正しく出ているか出力
-        # print("Current_plan is" + message)
-
-        # テスト用コード：ptを取得して出力
-        # print("pt is" + pt)
 
         self.current_plan = message
         self.save(pt)
@@ -413,29 +356,6 @@ class LLMAgent:
 
         return instruction
 
-    def generate_answer_count_shape(self) -> str:
-        # 指示文をプロンプトに追記する
-        pt = self.prompt.base_count_shape_prompt
-        # 「Current task: 」とゴール(task)を追記
-        action_prompt = "Current task: " + self.task
-        # プロンプトに解くタスクを追記する
-        pt += action_prompt
-        # 指示分にHTMLを追記する
-        pt += self.webpage_state_prompt(with_task=self.with_task)
-
-        # テスト用コード：指示文がどんな内容か出力する
-        print("Input pt is" + pt)
-
-        message = self.get_response(pt)
-
-        # テスト用コード：どんな内容が返答されているか出力する
-        print("generate_answer message is " + message)
-
-        # message内にある文言で不要な部分を削除する
-        answer_message = self.process_answer(message)
-
-        return answer_message
-
     def update_action(self, pt=None, message=None):
         if self.prompt.update_action and self.state_grounding:
             pt += self.prompt.update_action
@@ -487,8 +407,6 @@ class LLMAgent:
             return MiniWoBMoveXpath(xpath)
         elif inst_type == "clickxpath":
             xpath = " ".join(instruction[1:])
-            # テスト用コード：instructionの中身を確認するために出力
-            # print("Actual instruction is " + xpath)
             return MiniWoBElementClickXpath(xpath)
         elif inst_type == "clickoption":
             xpath = " ".join(instruction[1:])

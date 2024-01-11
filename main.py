@@ -15,8 +15,6 @@ import logging
 
 logging.basicConfig(level=logging.INFO)
 
-from computergym.miniwob.miniwob_interface.action import MiniWoBElementClickXpath_count_shape
-
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument("--env", type=str, default="click-button")
@@ -232,14 +230,13 @@ def miniwob_count_shape(opt):
 
         # プロンプトにgoalとHTMLを渡してanswerを受け取る
         try:
-            answer = llm_agent.generate_answer_count_shape()
-            logging.info(f"The executed answer: {answer}")
-
-            # 回答の値のbuttonを押しにいく
-            # miniwob_action = MiniWoBElementClickXpath_count_shape(answer)
+            instruction = llm_agent.generate_action()
+            logging.info(f"The executed instruction: {instruction}")
+            
+            miniwob_action = llm_agent.convert_to_miniwob_action(instruction)
 
             # envに結果を返してリワードを更新する
-            # states, rewards, dones, _ = env.step([miniwob_action])
+            states, rewards, dones, _ = env.step([miniwob_action])
         except ValueError:
             print("Invalid action or rci action fail")
             rewards = [0]

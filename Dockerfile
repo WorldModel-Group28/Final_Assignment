@@ -2,11 +2,12 @@
 FROM python:3.9-slim
 
 # コンテナ内の作業ディレクトリを設定
-WORKDIR /usr/src/app
+WORKDIR /app
 
 # アプリケーションのソースコードをホストからイメージのファイルシステムにコピー
 # .dockerignore を使用して不要なファイルを除外
 COPY . .
+COPY config.json ./config.json
 
 # requirements.txtに記載されている必要なパッケージをインストール
 RUN pip install --no-cache-dir -r requirements.txt

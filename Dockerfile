@@ -13,3 +13,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # MiniWoB++をセットアップ
 RUN cd computergym && pip install -e .
+
+# コンテナ起動時にbashシェルを開始
+CMD ["/bin/bash"]

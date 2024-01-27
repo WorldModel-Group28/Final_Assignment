@@ -35,8 +35,12 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4EB27DB2A3B88B8B
 RUN apt-get update --fix-missing && apt-get install -y --fix-missing google-chrome-stable
 
 
+# # ChromeDriverをダウンロードしてインストール
+# RUN wget -q "https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip" -O /tmp/chromedriver.zip
+# RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
+
 # ChromeDriverをダウンロードしてインストール
-RUN wget -q "https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip" -O /tmp/chromedriver.zip
+RUN wget -q "https://chromedriver.storage.googleapis.com/120.0.6099.109/chromedriver_linux64.zip" -O /tmp/chromedriver.zip
 RUN unzip /tmp/chromedriver.zip chromedriver -d /usr/local/bin/
 
 # ChromeDriverとchromeのパスを通す

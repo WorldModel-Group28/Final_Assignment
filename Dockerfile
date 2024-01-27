@@ -30,7 +30,7 @@ RUN sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable 
 RUN apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 4EB27DB2A3B88B8B
 
 # Google Chromeをインストール
-RUN apt-get update && apt-get install -y google-chrome-stable
+# RUN apt-get update && apt-get install -y google-chrome-stable
 
 RUN apt-get update --fix-missing && apt-get install -y --fix-missing google-chrome-stable
 

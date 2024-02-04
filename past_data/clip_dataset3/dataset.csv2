@@ -1,0 +1,100 @@
+image_filename,text_description,button_texts
+image_0001.png,How many large blue letters are there?,3| |2| |8| |9| |1
+image_0002.png,How many small ns are there?,4| |0| |8| |6| |1
+image_0003.png,,9| |4| |5| |3| |8
+image_0004.png,How many large items are there?,8| |9| |5| |1| |3
+image_0005.png,How many large items are there?,2| |9| |6| |7| |1
+image_0006.png,How many letters are there?,6| |0| |4| |1| |5
+image_0007.png,How many small aqua items are there?,6| |4| |3| |7| |1
+image_0008.png,How many yellow digits are there?,7| |1| |8| |0| |3
+image_0009.png,How many cs are there?,0| |1| |7| |3| |2
+image_0010.png,How many large green items are there?,9| |1| |8| |5| |6
+image_0011.png,How many digits are there?,3| |0| |1| |8| |9
+image_0012.png,How many ns are there?,1| |8| |7| |2| |0
+image_0013.png,How many large yellow items are there?,6| |3| |5| |0| |2
+image_0014.png,How many small letters are there?,2| |3| |6| |0| |1
+image_0015.png,How many large 9s are there?,2| |3| |5| |9| |0
+image_0016.png,How many large shapes are there?,2| |3| |5| |0| |4
+image_0017.png,How many green items are there?,8| |0| |5| |7| |3
+image_0018.png,How many small qs are there?,9| |8| |7| |4| |1
+image_0019.png,How many large rectangles are there?,5| |3| |1| |2| |9
+image_0020.png,How many large black items are there?,4| |3| |2| |9| |1
+image_0021.png,How many small black digits are there?,0| |8| |3| |6| |5
+image_0022.png,How many green letters are there?,1| |9| |3| |7| |2
+image_0023.png,How many small red digits are there?,3| |8| |4| |0| |2
+image_0024.png,How many small digits are there?,2| |3| |7| |5| |1
+image_0025.png,How many aqua triangles are there?,1| |0| |3| |5| |9
+image_0026.png,How many large blue digits are there?,1| |9| |0| |5| |7
+image_0027.png,How many yellow items are there?,1| |2| |9| |4| |3
+image_0028.png,How many blue items are there?,3| |2| |9| |7| |4
+image_0029.png,How many letters are there?,2| |6| |4| |0| |1
+image_0030.png,How many magenta items are there?,9| |7| |8| |1| |4
+image_0031.png,How many large items are there?,7| |1| |8| |5| |4
+image_0032.png,How many shapes are there?,7| |3| |1| |2| |0
+image_0033.png,How many small magenta items are there?,8| |3| |9| |1| |5
+image_0034.png,How many small green Zs are there?,8| |1| |6| |5| |0
+image_0035.png,How many small blue letters are there?,2| |7| |3| |8| |1
+image_0036.png,How many large yellow items are there?,5| |3| |1| |4| |9
+image_0037.png,How many gs are there?,3| |1| |7| |6| |8
+image_0038.png,How many aqua letters are there?,5| |6| |4| |2| |1
+image_0039.png,How many small items are there?,6| |5| |1| |3| |0
+image_0040.png,How many circles are there?,5| |1| |9| |6| |2
+image_0041.png,How many large yellow items are there?,0| |9| |2| |8| |4
+image_0042.png,How many letters are there?,1| |4| |2| |5| |3
+image_0043.png,How many shapes are there?,1| |4| |7| |5| |2
+image_0044.png,How many large rectangles are there?,9| |1| |4| |7| |2
+image_0045.png,How many large red letters are there?,8| |1| |0| |3| |6
+image_0046.png,How many circles are there?,1| |3| |2| |7| |0
+image_0047.png,How many aqua items are there?,0| |8| |1| |6| |2
+image_0048.png,How many small red items are there?,9| |7| |0| |5| |4
+image_0049.png,How many small red triangles are there?,1| |2| |0| |5| |4
+image_0050.png,How many shapes are there?,5| |1| |4| |6| |3
+image_0051.png,How many magenta letters are there?,2| |9| |1| |3| |6
+image_0052.png,How many small green Ns are there?,1| |8| |0| |9| |6
+image_0053.png,How many large Vs are there?,1| |4| |0| |2| |7
+image_0054.png,How many Ks are there?,7| |8| |5| |0| |1
+image_0055.png,How many large zs are there?,9| |7| |4| |0| |1
+image_0056.png,How many large items are there?,8| |5| |2| |9| |1
+image_0057.png,How many large shapes are there?,8| |6| |7| |2| |9
+image_0058.png,How many black digits are there?,0| |3| |1| |8| |6
+image_0059.png,How many black letters are there?,2| |8| |0| |1| |9
+image_0060.png,How many magenta letters are there?,4| |3| |1| |7| |9
+image_0061.png,How many red items are there?,5| |1| |3| |9| |2
+image_0062.png,How many red shapes are there?,1| |0| |9| |5| |2
+image_0063.png,How many shapes are there?,7| |0| |9| |4| |8
+image_0064.png,How many aqua items are there?,7| |9| |5| |1| |4
+image_0065.png,How many small blue digits are there?,7| |9| |4| |3| |1
+image_0066.png,How many red digits are there?,3| |1| |9| |7| |5
+image_0067.png,How many small items are there?,6| |1| |0| |8| |3
+image_0068.png,How many 4s are there?,8| |7| |9| |1| |4
+image_0069.png,How many 6s are there?,1| |0| |3| |8| |6
+image_0070.png,How many large red items are there?,1| |3| |4| |5| |9
+image_0071.png,How many small red items are there?,6| |9| |1| |0| |7
+image_0072.png,How many large 9s are there?,1| |2| |6| |4| |0
+image_0073.png,How many small blue items are there?,3| |4| |1| |0| |2
+image_0074.png,How many aqua items are there?,5| |1| |2| |3| |4
+image_0075.png,How many letters are there?,9| |4| |2| |3| |0
+image_0076.png,How many Rs are there?,8| |6| |7| |2| |1
+image_0077.png,How many red items are there?,7| |0| |2| |1| |9
+image_0078.png,How many large Ss are there?,4| |8| |0| |1| |5
+image_0079.png,How many magenta items are there?,8| |6| |4| |3| |2
+image_0080.png,How many rectangles are there?,5| |1| |6| |0| |2
+image_0081.png,How many ks are there?,1| |7| |3| |8| |6
+image_0082.png,How many large aqua Rs are there?,7| |5| |9| |6| |1
+image_0083.png,How many small red letters are there?,8| |7| |3| |1| |5
+image_0084.png,How many Vs are there?,7| |2| |1| |4| |9
+image_0085.png,How many small blue items are there?,9| |0| |6| |2| |1
+image_0086.png,How many shapes are there?,8| |7| |6| |1| |0
+image_0087.png,How many large items are there?,1| |6| |2| |5| |0
+image_0088.png,How many large magenta items are there?,3| |7| |0| |4| |2
+image_0089.png,How many large black 6s are there?,0| |9| |6| |5| |1
+image_0090.png,How many large items are there?,4| |7| |5| |6| |1
+image_0091.png,How many yellow ds are there?,6| |7| |1| |2| |3
+image_0092.png,How many magenta triangles are there?,6| |8| |1| |9| |0
+image_0093.png,How many magenta letters are there?,1| |8| |5| |0| |7
+image_0094.png,How many small aqua ls are there?,0| |6| |9| |7| |5
+image_0095.png,How many small green items are there?,2| |5| |8| |0| |1
+image_0096.png,How many large items are there?,2| |5| |1| |3| |8
+image_0097.png,How many small 2s are there?,1| |6| |2| |7| |8
+image_0098.png,How many aqua items are there?,3| |0| |1| |5| |2
+image_0099.png,How many small items are there?,7| |2| |3| |9| |6

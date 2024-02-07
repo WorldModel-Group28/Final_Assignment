@@ -1,0 +1,70 @@
+
+We have an autonomous computer control agent that can perform atomic instructions specified by natural language to control computers. There are four types of instructions it can execute. 
+
+First, given the instruction that matches the regular expression, "{type}", it can type a list of characters via the keyboard. This instruction should specify the target keyboard input for the agent to type. Before this typing instruction, you should first locate the cursor by clicking the input box with click instruction.
+
+Second, given the instruction that matches the regular expression, "{clickxpath}", it can click an HTML element with an xpath that is visible on the webpage. The target of this instruction should be a valid xpath.
+
+Third, You have to count how many numbers, letters and shapes there are in the <svg> tag with instructions given by natural language.You can inspect the XML structure within the <svg></svg> tags. 
+
+It is described following the rules below:
+
+The <text> tags contain alphanumeric values.
+The <polygon> tags represent shapes such as triangles.
+The <circle> tags represent circular shapes.
+All three types of tags have a style attribute specifying colors and more.
+The same value or shape may exist multiple times, but there may be times when it does not exist.
+If it does not exist, please answer with the number 0.
+
+Finally, you should check the multiple button elements in <button> and there should be a button that matches the number you counted. Please figure out the number of the button and write it in the xpath in your answer.
+
+Example plan1)
+task: How many small letters are there?
+plan: we need to count the number of small letters in the svg area.
+
+<div id="wrap" data-wob_ref="2" data-wob_eps="e9">
+  <div id="query"><div>How many small letters are there?</div><div></div></div>
+  <div id="area" data-wob_ref="3" data-wob_eps="e9">
+    <svg id="area_svg" data-wob_ref="4" data-wob_eps="e9"><text x="50" y="110" fill="red" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="5" data-wob_eps="e9">c</text><text x="10" y="110" fill="blue" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="6" data-wob_eps="e9">z</text><circle cx="110" cy="90" r="5" fill="green" style="cursor:pointer;" data-wob_ref="7" data-wob_eps="e9"></circle><text x="10" y="30" fill="red" text-anchor="middle" alignment-baseline="central" font-size="20px" style="cursor:pointer;" data-wob_ref="8" data-wob_eps="e9">u</text></svg>
+    <div id="count-buttons" data-wob_ref="9" data-wob_eps="e9"><button data-wob_ref="10" data-wob_eps="e9">6</button><button data-wob_ref="11" data-wob_eps="e9">0</button><button data-wob_ref="12" data-wob_eps="e9">4</button><button data-wob_ref="13" data-wob_eps="e9">3</button><button data-wob_ref="14" data-wob_eps="e9">1</button></div>
+  </div>
+</div>
+
+You can count 3 small letters in the svg area and find the number 3 in the 5th button tag.
+You must answer :
+clickxpath //*[@id="count-buttons"]/button[5]
+
+Example plan2)
+task: How many 7s are there?
+plan: we need to count the number of 7s in the svg area.
+
+<div id="wrap" data-wob_ref="2" data-wob_eps="e10">
+  <div id="query"><div>How many 7s are there?</div><div></div></div>
+  <div id="area" data-wob_ref="3" data-wob_eps="e10">
+    <svg id="area_svg" data-wob_ref="4" data-wob_eps="e10"><text x="30" y="50" fill="blue" text-anchor="middle" alignment-baseline="central" font-size="20px" style="cursor:pointer;" data-wob_ref="5" data-wob_eps="e10">2</text><circle cx="70" cy="70" r="5" fill="green" style="cursor:pointer;" data-wob_ref="6" data-wob_eps="e10"></circle><text x="110" y="70" fill="green" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="7" data-wob_eps="e10">z</text><circle cx="110" cy="110" r="5" fill="red" style="cursor:pointer;" data-wob_ref="8" data-wob_eps="e10"></circle><polygon points="20,20 30,0 40,20" fill="yellow" style="cursor:pointer;" data-wob_ref="9" data-wob_eps="e10"></polygon><text x="70" y="30" fill="black" text-anchor="middle" alignment-baseline="central" font-size="20px" style="cursor:pointer;" data-wob_ref="10" data-wob_eps="e10">1</text><text x="70" y="110" fill="magenta" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="11" data-wob_eps="e10">9</text><text x="50" y="110" fill="black" text-anchor="middle" alignment-baseline="central" font-size="20px" style="cursor:pointer;" data-wob_ref="12" data-wob_eps="e10">Q</text></svg>
+    <div id="count-buttons" data-wob_ref="13" data-wob_eps="e10"><button data-wob_ref="14" data-wob_eps="e10">0</button><button data-wob_ref="15" data-wob_eps="e10">2</button><button data-wob_ref="16" data-wob_eps="e10">6</button><button data-wob_ref="17" data-wob_eps="e10">5</button><button data-wob_ref="18" data-wob_eps="e10">9</button></div>
+  </div>
+</div>
+
+You can count 0 7s in the svg area and find the number 0 in the first button tag.
+You must answer :
+clickxpath //*[@id="count-buttons"]/button[1]
+
+Example plan3)
+task: How many circles are there?
+plan: we need to count the number of circles in the svg area.
+
+<div id="wrap" data-wob_ref="2" data-wob_eps="e0">
+  <div id="query"><div>How many circles are there?</div><div></div></div>
+  <div id="area" data-wob_ref="3" data-wob_eps="e0">
+    <svg id="area_svg" data-wob_ref="4" data-wob_eps="e0"><text x="50" y="50" fill="yellow" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="5" data-wob_eps="e0">6</text><text x="30" y="70" fill="black" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="6" data-wob_eps="e0">f</text><text x="50" y="90" fill="green" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="7" data-wob_eps="e0">o</text><text x="130" y="50" fill="green" text-anchor="middle" alignment-baseline="central" font-size="20px" style="cursor:pointer;" data-wob_ref="8" data-wob_eps="e0">2</text><circle cx="50" cy="70" r="5" fill="red" style="cursor:pointer;" data-wob_ref="9" data-wob_eps="e0"></circle><rect x="25" y="5" width="10" height="10" fill="red" style="cursor:pointer;" data-wob_ref="10" data-wob_eps="e0"></rect><text x="10" y="110" fill="green" text-anchor="middle" alignment-baseline="central" font-size="10px" style="cursor:pointer;" data-wob_ref="11" data-wob_eps="e0">H</text></svg>
+    <div id="count-buttons" data-wob_ref="12" data-wob_eps="e0"><button data-wob_ref="13" data-wob_eps="e0">1</button><button data-wob_ref="14" data-wob_eps="e0">0</button><button data-wob_ref="15" data-wob_eps="e0">9</button><button data-wob_ref="16" data-wob_eps="e0">8</button><button data-wob_ref="17" data-wob_eps="e0">2</button></div>
+  </div>
+</div>
+
+You can count 0 circles in the svg area and find the number 0 in the first button tag.
+You must answer :
+clickxpath //*[@id="count-buttons"]/button[1]
+
+Please inspect the tags within the <svg> element in the HTML below and answer the task.
+You must answer in the format //*[@id="count-buttons"]/button[i]. Replace [i] with a number according to the instructions below.

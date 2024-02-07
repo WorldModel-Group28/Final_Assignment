@@ -9,9 +9,17 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 
+from bs4 import BeautifulSoup
+
 from tqdm import tqdm
 
 import logging
+
+import os
+import datetime
+t_delta = datetime.timedelta(hours=9)
+JST = datetime.timezone(t_delta, 'JST')
+now = datetime.datetime.now(JST)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -30,6 +38,57 @@ def parse_opt():
 
     return opt
 
+# スクリーンショットの格納先フォルダを作成 -> clip_dataset
+def setup_dataset_directory(base_dir="clip_dataset"):
+    images_dir = os.path.join(base_dir, "images")
+    os.makedirs(images_dir, exist_ok=True)
+    # csv_file_path = os.path.join(base_dir, "dataset.csv")
+    '''
+    with open(csv_file_path, 'w', newline='', encoding='utf-8') as file:
+        writer = csv.writer(file)
+        writer.writerow(["image_filename", "text_description", "button_texts"])
+    '''
+    # return images_dir, csv_file_path
+    return images_dir
+
+# HTMLのbutton要素を取得
+def get_button_list(html_state):
+    button_list = []
+    soup = BeautifulSoup(html_state, "html.parser")
+    button_id = "count-buttons"
+    button_elements = soup.find_all("button")
+    for button in button_elements:
+        button_list.append(int(button.text)) 
+    return button_list
+
+# 英数字、図形部分のHTMLの画像をスクリーンショットで撮る
+def get_screenshot(html_state):
+    
+    ### HTMLを指定の格納先に保存
+    
+    # HTMLの格納先を指定
+    current_dir = os.getcwd()
+    file_path = './clip/miniwob/html/count-shape.html'
+    # ファイルを書き込みモードで開き、HTMLコンテンツを書き込む
+    with open(file_path, 'w', encoding='utf-8') as file:
+        file.write(html_state)
+    ### スクリーンショットを指定の格納先に保存
+
+    # ファイルをChromeで開く
+    file_path_url = 'file:///' + os.path.abspath(file_path)
+    print("file_path_url is" + file_path_url)
+    driver = get_webdriver(file_path_url)
+    svg_element = driver.find_element(By.ID, "area_svg")
+    image_filename = f"image_{now:%Y%m%d%H%M%S}.png"
+    images_dir = './clip/past_data/clip_dataset/images'
+    image_path = os.path.join(images_dir, image_filename)
+    # スクリーンショットを取得
+    svg_element.screenshot(image_path)
+    driver.quit()
+    # HTMLファイルを削除
+    os.remove(file_path)
+    return image_path
+    
 # 【確認不要】実行環境がfacebookのときだけ実行する
 def web(opt, url):
     driver = get_webdriver(url)
@@ -116,7 +175,7 @@ def get_webdriver(url):
     options.add_argument("disable-gpu")
     options.add_argument("no-sandbox")
 
-    driver = webdriver.Chrome(chrome_options=options)
+    driver = webdriver.Chrome(options=options)
     driver.implicitly_wait(5)
     driver.maximize_window()
     driver.implicitly_wait(5)
@@ -228,9 +287,19 @@ def miniwob_count_shape(opt):
         # llm_agent.pyにhtmlを渡す処理
         llm_agent.update_html_state(html_state)
 
-        # プロンプトにgoalとHTMLを渡してanswerを受け取る
+        ## beautifulsoupで選択肢リストを取得する
+        button_list = get_button_list(html_state)
+        # print(button_list)
+        ## seleniumでスクリーンショットを撮り、画像を保存する
+        image_path = get_screenshot(html_state)
+        ## CLIPで画像を読み込み、最も確率の高い選択肢を抽出する
+        # button_num = get_button_num_from_clip(states[0].utterance,button_list)
+        button_num = 1
+        # クリックするボタンに最も確率の高い選択肢を適用する
+        instruction = f"clickxpath //*[@id=\"count-buttons\"]/button[{button_num}]"
         try:
-            instruction = llm_agent.generate_action()
+            # instruction = llm_agent.generate_action()
+            # print("instruction is" + instruction)
             logging.info(f"The executed instruction: {instruction}")
             
             miniwob_action = llm_agent.convert_to_miniwob_action(instruction)

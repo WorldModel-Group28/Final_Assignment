@@ -1,5 +1,6 @@
 import argparse
 import random
+import re
 
 import computergym
 import gym
@@ -20,6 +21,12 @@ import datetime
 t_delta = datetime.timedelta(hours=9)
 JST = datetime.timezone(t_delta, 'JST')
 now = datetime.datetime.now(JST)
+
+########## CLIP用 ########## 
+import torch
+from PIL import Image
+from transformers import CLIPProcessor, CLIPModel
+###########################
 
 logging.basicConfig(level=logging.INFO)
 
@@ -55,7 +62,6 @@ def setup_dataset_directory(base_dir="clip_dataset"):
 def get_button_list(html_state):
     button_list = []
     soup = BeautifulSoup(html_state, "html.parser")
-    button_id = "count-buttons"
     button_elements = soup.find_all("button")
     for button in button_elements:
         button_list.append(int(button.text)) 
@@ -76,7 +82,7 @@ def get_screenshot(html_state):
 
     # ファイルをChromeで開く
     file_path_url = 'file:///' + os.path.abspath(file_path)
-    print("file_path_url is" + file_path_url)
+    # print("file_path_url is" + file_path_url)
     driver = get_webdriver(file_path_url)
     svg_element = driver.find_element(By.ID, "area_svg")
     image_filename = f"image_{now:%Y%m%d%H%M%S}.png"
@@ -292,9 +298,11 @@ def miniwob_count_shape(opt):
         # print(button_list)
         ## seleniumでスクリーンショットを撮り、画像を保存する
         image_path = get_screenshot(html_state)
+        # print(image_path)
+
         ## CLIPで画像を読み込み、最も確率の高い選択肢を抽出する
-        # button_num = get_button_num_from_clip(states[0].utterance,button_list)
-        button_num = 1
+        button_num = get_button_num(states[0].utterance,button_list,image_path)
+
         # クリックするボタンに最も確率の高い選択肢を適用する
         instruction = f"clickxpath //*[@id=\"count-buttons\"]/button[{button_num}]"
         try:
@@ -336,6 +344,82 @@ def get_html_state(opt, states):
     if opt.env in extra_html_task:
         html_body += states[0].html_extra
     return html_body
+
+########## CLIP用 ################################################## 
+def load_clip_model():
+        device = "cuda" if torch.cuda.is_available() else "cpu"
+        model, preprocess = clip.load("ViT-B/32", device=device)
+        return model, preprocess, device
+
+def predict_choice(model, preprocess, device, image_path, text_descriptions):
+    image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
+    text = clip.tokenize(text_descriptions).to(device)
+
+    with torch.no_grad():
+        image_features = model.encode_image(image)
+        text_features = model.encode_text(text)
+
+        # 類似度スコアの計算（修正部分）
+        logits_per_image = (image_features @ text_features.T).softmax(dim=-1)
+        probs = logits_per_image.cpu().numpy()
+
+    return probs[0]
+
+
+def get_button_num(problem, button_list,image_path):
+    # 説明文
+    problem = problem
+    print("problem is " + problem)
+    # 画像パス
+    image_path = image_path
+
+    # CLIPモデルとプロセッサをロード
+    model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32")
+    processor = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+
+    # 画像を読み込む
+    image = Image.open(image_path)  # 画像のパスを指定
+
+    # テキスト文言を作成
+    pattern = r"How many (.+?) are"
+    # 正規表現で検索
+    match = re.search(pattern, problem)
+
+    if match:
+        # マッチした部分（グループ1）を取得
+        result = match.group(1)
+        print("抽出された文言:", result)
+    else:
+        print("マッチする文言が見つかりませんでした。")
+
+
+    # 確率算出するテキストを作成する
+    text_descriptions = []
+    for button in button_list:
+        text_descriptions.append(str(button) + " " + result)
+
+    print(text_descriptions)
+
+    # 画像とテキストをプロセッサで処理
+    inputs = processor(text=text_descriptions, images=image, return_tensors="pt", padding=True)
+
+    # 画像とテキストの類似度を計算
+    outputs = model(**inputs)
+    logits_per_image = outputs.logits_per_image  # これは画像ごとのテキストの類似度
+    probs = logits_per_image.softmax(dim=1)  # 類似度を確率に変換
+
+    # 各テキスト説明の類似度を出力
+    for i, text in enumerate(text_descriptions):
+       print(f"説明: {text} (類似度: {probs[0][i].item():.4f})")
+
+    # 最も類似度の高いテキストを取得
+    top_prob, top_id = probs.max(dim=1)
+
+    # 結果を出力
+    print(f"最も類似度の高い説明: {text_descriptions[top_id]} (類似度: {top_prob.item():.4f})")
+    # 要素番号に１を足して返す
+    return text_descriptions.index(text_descriptions[top_id])+1
+########################################################################## 
 
 # メインの実行タスク
 if __name__ == "__main__":

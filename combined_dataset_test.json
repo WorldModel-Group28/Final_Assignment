@@ -1,0 +1,62 @@
+[
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065226.png",
+        "text": "2 small black rectangles",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.0
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065234.png",
+        "text": "5 2s",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065240.png",
+        "text": "7 green letters",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065253.png",
+        "text": "3 small items",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065300.png",
+        "text": "1 red items",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065309.png",
+        "text": "2 us",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065319.png",
+        "text": "6 red circles",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065333.png",
+        "text": "5 small black digits",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065340.png",
+        "text": "1 letters",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    },
+    {
+        "image_path": "./clip/past_data/clip_dataset/images/image_20240211065345.png",
+        "text": "9 digits",
+        "similarity": 0.39484044909477234,
+        "success_rate": 0.1
+    }
+]
